@@ -1,56 +1,73 @@
+import java.util.Arrays;
+
 /**
  * =============================================================
- * MAIN CLASS - UseCase18TrainConsistMgmnt
+ * MAIN CLASS - UseCase19TrainConsistMgmnt
  * =============================================================
- * * Use Case 18: Linear Search for Bogie ID
+ * * Use Case 19: Binary Search for Bogie ID
  * * Description:
  * This class demonstrates searching for a specific bogie ID
- * using a simple Linear Search algorithm.
+ * using the Binary Search algorithm on sorted data.
  * * At this stage, the application:
- * - Creates an array of bogie IDs
- * - Accepts a search key
- * - Traverses array sequentially
- * - Stops when match is found
- * - Displays search result
- * * This maps basic searching logic using sequential traversal.
+ * - Creates sorted bogie ID array
+ * - Defines search key
+ * - Applies binary search logic
+ * - Narrows search range each iteration
+ * - Displays result
+ * * This maps optimized searching logic using divide-and-conquer.
  * * @author Developer
- * @version 18.0
+ * @version 19.0
  */
 
-public class UseCase18TrainConsistMgmnt {
+public class UseCase19TrainConsistMgmnt {
 
     public static void main(String[] args) {
+        System.out.println("=============================================================");
+        System.out.println(" UC19 - Binary Search for Bogie ID ");
+        System.out.println("=============================================================\n");
 
         // 1. Create array of bogie IDs
         String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
 
-        // 2. Bogie ID to search (Search Key)
-        String searchId = "BG309";
+        // 2. Ensure data is sorted (Precondition for Binary Search)
+        Arrays.sort(bogieIds);
 
-        // 3. Display all bogies
-        System.out.println("Available Bogie IDs:");
+        // 3. Search key
+        String key = "BG309";
+
+        // 4. Display available bogies
+        System.out.println("Sorted Bogie IDs:");
         for (String id : bogieIds) {
             System.out.print(id + " ");
         }
-        System.out.println("\n\nSearching for: " + searchId);
+        System.out.println("\n\nSearching for: " + key);
 
-        // ---- LINEAR SEARCH LOGIC ----
-        // Traverse each element sequentially
-        boolean found = false;
+        // ---- BINARY SEARCH LOGIC ----
+        int low = 0;
+        int high = bogieIds.length - 1;
+        int resultIndex = -1;
 
-        for (String id : bogieIds) {
-            // Compare current element with search key
-            if (id.equals(searchId)) {
-                found = true;
-                break; // Stop the loop once the match is found
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            // Compare the middle element with the key
+            int comparison = key.compareTo(bogieIds[mid]);
+
+            if (comparison == 0) {
+                resultIndex = mid; // Key found!
+                break;
+            } else if (comparison > 0) {
+                low = mid + 1;    // Search in the right half
+            } else {
+                high = mid - 1;   // Search in the left half
             }
         }
 
-        // 4. Display result
-        if (found) {
-            System.out.println("Result: Bogie " + searchId + " was found in the system.");
+        // 5. Display result
+        if (resultIndex != -1) {
+            System.out.println("Result: Bogie '" + key + "' found at index " + resultIndex + ".");
         } else {
-            System.out.println("Result: Bogie " + searchId + " was NOT found.");
+            System.out.println("Result: Bogie '" + key + "' not found.");
         }
     }
 }
